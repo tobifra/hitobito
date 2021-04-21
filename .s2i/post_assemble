@@ -18,7 +18,9 @@ fi
 
 if [[ $PULL_TRANSIFEX -eq 1 ]]; then
   echo 'pulling transifex translations ...'
-  RAILS_HOST_NAME='build.hitobito.ch' bundle exec rake tx:pull tx:wagon:pull -t
+  scl enable rh-python38 'python --version'
+  scl enable rh-python38 'tx --version'
+  RAILS_HOST_NAME='build.hitobito.ch' scl enable rh-python38 'bundle exec rake tx:pull tx:wagon:pull -t'
 fi
 
 BUILD_DATE=$(date '+%Y-%m-%d %H:%M:%S')
