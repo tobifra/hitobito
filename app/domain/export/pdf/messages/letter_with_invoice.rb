@@ -14,6 +14,7 @@ module Export::Pdf::Messages
 
     def render_sections(recipient)
       super
+      render_donation_confirmation(pdf, recipient) if @letter.donation_confirmation?
       render_payment_slip(pdf, recipient)
     end
 
@@ -27,7 +28,6 @@ module Export::Pdf::Messages
     def render_payment_slip(pdf, recipient)
       invoice = @letter.invoice_for(recipient)
       options = @options.merge(cursors: cursors)
-      binding.pry
       if invoice.qr?
         Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, options).render
       else
@@ -41,9 +41,8 @@ module Export::Pdf::Messages
 
     private
 
-    def last_years_donations
-      binding.pry
-      Donations.in_last(1.year).in_layer(layer).confirmations
+    def render_donation_confirmation(pdf, recipient)
+      Export::Pdf::Messages::LetterWithInvoice::DonationConfirmation.new(pdf, @letter, recipient, {}).render
     end
 
   end

@@ -33,6 +33,10 @@ class Donation
     self
   end
 
+  def confirmations
+    @donations.joins(:invoice).group(:'invoices.recipient_id').sum('payments.amount')
+  end
+
   def previous_amount(options = {})
     if options[:increased_by]
       increased_amount = donation_sum * (1.0 + options[:increased_by].to_f/100.0)

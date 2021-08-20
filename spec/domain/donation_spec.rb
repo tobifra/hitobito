@@ -152,6 +152,32 @@ describe Donation do
     end
   end
 
+  context 'confirmations' do
+    it 'maps donated amount to person' do
+      fabricate_donation(1000)
+      fabricate_donation(200)
+
+      confirmations = Donation.new.in_last(1.year).in_layer(top_layer).confirmations
+
+      expect(confirmations[bottom_member.id]).to eq(1200)
+    end
+
+    it 'only takes donations from the recent year' do
+      fabricate_donation(1000)
+      fabricate_donation(1000, 2.years.ago)
+
+      confirmations = Donation.new.in_last(1.year).in_layer(top_layer).confirmations
+
+      expect(confirmations[bottom_member.id]).to eq(1000)
+    end
+
+    it 'does not contain receipient if nothing spent' do
+      confirmations = Donation.new.in_last(1.year).in_layer(top_layer).confirmations
+
+      expect(confirmations[bottom_member.id]).to eq(nil)
+    end
+  end
+
   private
 
   def fabricate_donation(amount, received_at = 1.year.ago)
