@@ -26,7 +26,11 @@ class Export::Pdf::Messages::LetterWithInvoice
 
     def last_year_donation_count
       currency = letter.invoice.currency
+
+      # rubocop:disable LineLength
       donation_count = Donation.new.in_last(1.year).in_layer(letter.group).of_person(@recipient).previous_amount.to_s
+      # rubocop:enable LineLength
+
       "#{donation_count} #{currency}"
     end
   end

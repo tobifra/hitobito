@@ -42,7 +42,9 @@ module Export::Pdf::Messages
     private
 
     def render_donation_confirmation(pdf, recipient)
+      # rubocop:disable LineLength
       Export::Pdf::Messages::LetterWithInvoice::DonationConfirmation.new(pdf, @letter, recipient, {}).render
+      # rubocop:enable LineLength
     end
 
   end
