@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 2021, Die Mitte Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 class Export::Pdf::Messages::LetterWithInvoice
   class DonationConfirmation < Export::Pdf::Messages::Letter::Section
     def initialize(pdf, letter, recipient, options)
@@ -8,16 +13,21 @@ class Export::Pdf::Messages::LetterWithInvoice
     end
 
     def render
-      stamped(:donation_confirmation_text) { donation_confirmation_text }
-      last_year_donation_count
+      donation_text = stamped(:donation_confirmation_text) { donation_confirmation_text }
+      text([donation_text,
+            last_year_donation_count])
     end
 
+    private
+
     def donation_confirmation_text
-      text "Folgender betrag wurde von Ihnen im letzten Jahr gespendet: "
+      "\n " + I18n.t('messages.export.section.donation_confirmation')
     end
 
     def last_year_donation_count
-      text Donation.new.in_last(1.year).in_layer(letter.group).of_person(@recipient).previous_amount.to_s
+      currency = letter.invoice.currency
+      donation_count = Donation.new.in_last(1.year).in_layer(letter.group).of_person(@recipient).previous_amount.to_s
+      "#{donation_count} #{currency}"
     end
   end
 end

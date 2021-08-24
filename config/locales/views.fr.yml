@@ -814,6 +814,10 @@ fr:
     export_enqueued: 'L''export est démarré en arrière-plan et sera téléchargé après complétion.'
     show:
       recipients_empty: La liste de distribution est vide, aucun PDF ne peut être créé.
+    export:
+      section:
+        donation_confirmation: "Le montant suivant a été donné par vous l'année dernière: "
+
   navigation:
     menu: 'Menu'
     groups: 'Groupes'

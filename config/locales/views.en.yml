@@ -759,6 +759,10 @@ en:
         sender: "Sender: %{mail}"
         sender_rejected: Sender has been rejected
         unkown_recipient: Sender unknown
+    export:
+      section:
+        donation_confirmation: "The following amount was donated by you last year: "
+
   navigation:
     menu: 'Menu'
     groups: 'Groups'

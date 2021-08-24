@@ -813,6 +813,9 @@ it:
     export_enqueued: 'L''esportazione viene iniziata in retroscena e verrà scaricata al termine.'
     show:
       recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
+    export:
+      section:
+        donation_confirmation: "Il seguente importo è stato donato da voi l'anno scorso: "
   navigation:
     menu: 'Menu'
     groups: 'Gruppi'
