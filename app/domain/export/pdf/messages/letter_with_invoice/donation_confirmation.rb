@@ -14,8 +14,7 @@ class Export::Pdf::Messages::LetterWithInvoice
 
     def render
       donation_text = stamped(:donation_confirmation_text) { donation_confirmation_text }
-      text([donation_text,
-            last_year_donation_count])
+      text([donation_text, last_year_donation_amount])
     end
 
     private
@@ -24,14 +23,17 @@ class Export::Pdf::Messages::LetterWithInvoice
       "\n " + I18n.t('messages.export.section.donation_confirmation')
     end
 
-    def last_year_donation_count
+    def last_year_donation_amount
       currency = letter.invoice.currency
 
-      # rubocop:disable LineLength
-      donation_count = Donation.new.in_last(1.year).in_layer(letter.group).of_person(@recipient).previous_amount.to_s
-      # rubocop:enable LineLength
+      donation_amount = Donation.new.
+                                in_last(1.year).
+                                in_layer(letter.group).
+                                of_person(@recipient).
+                                previous_amount.
+                                to_s
 
-      "#{donation_count} #{currency}"
+      "#{donation_amount} #{currency}"
     end
   end
 end
