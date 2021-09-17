@@ -15,12 +15,13 @@ describe Invoice::BatchCreate do
   let(:group)        { groups(:top_layer) }
   let(:person)       { people(:top_leader) }
   let(:other_person) { people(:bottom_member) }
+  let(:subscription) { subscriptions(:leaders_group) }
+
+  before do
+    subscription.update!(role_types: [Group::TopGroup::Leader])
+  end
 
   it '#call creates invoices for abo' do
-    Subscription.create!(mailing_list: mailing_list,
-                         subscriber: group,
-                         role_types: [Group::TopGroup::Leader])
-
     list = InvoiceList.new(receiver: mailing_list, group: group, title: :title)
 
     invoice = Invoice.new(title: 'invoice', group: group)
@@ -40,10 +41,6 @@ describe Invoice::BatchCreate do
   end
 
   it '#call creates invoices for abo with variable donation amount' do
-    Subscription.create!(mailing_list: mailing_list,
-                         subscriber: group,
-                         role_types: [Group::TopGroup::Leader])
-
     list = InvoiceList.new(receiver: mailing_list, group: group, title: :title)
 
     group.invoice_config.update!(donation_increase_percentage: 5, donation_calculation_year_amount: 2)
@@ -69,10 +66,6 @@ describe Invoice::BatchCreate do
   end
 
   it '#call deletes invoice if variable donation with amount 0 is the only invoice item' do
-    Subscription.create!(mailing_list: mailing_list,
-                         subscriber: group,
-                         role_types: [Group::TopGroup::Leader])
-
     list = InvoiceList.new(receiver: mailing_list, group: group, title: :title)
 
     group.invoice_config.update!(donation_increase_percentage: 5, donation_calculation_year_amount: 2)
@@ -88,10 +81,6 @@ describe Invoice::BatchCreate do
   end
 
   it '#call deletes variable donation invoice item with amount 0' do
-    Subscription.create!(mailing_list: mailing_list,
-                         subscriber: group,
-                         role_types: [Group::TopGroup::Leader])
-
     list = InvoiceList.new(receiver: mailing_list, group: group, title: :title)
 
     group.invoice_config.update!(donation_increase_percentage: 5, donation_calculation_year_amount: 2)
@@ -116,10 +105,6 @@ describe Invoice::BatchCreate do
 
   it '#call offloads to job when recipients exceed limit' do
     Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group))
-    Subscription.create!(mailing_list: mailing_list,
-                         subscriber: group,
-                         role_types: [Group::TopGroup::Leader])
-
     list = InvoiceList.new(receiver: mailing_list, group: group, title: :title)
 
     invoice = Invoice.new(title: 'invoice', group: group)
@@ -157,10 +142,6 @@ describe Invoice::BatchCreate do
 
   it '#call does not rollback if any save fails' do
     Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group))
-    Subscription.create!(mailing_list: mailing_list,
-                         subscriber: group,
-                         role_types: [Group::TopGroup::Leader])
-
     list = InvoiceList.new(receiver: mailing_list, group: group, title: :title)
     invoice = Invoice.new(title: 'invoice', group: group)
     invoice.invoice_items.build(name: 'pens', unit_cost: 1.5)

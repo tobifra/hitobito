@@ -9,6 +9,7 @@ describe Person::Subscriptions do
   let(:top_layer) { groups(:top_layer) }
   let(:top_group) { groups(:top_group) }
 
+  let(:bottom_layer) { groups(:bottom_layer_one) }
 
   context :mailing_lists do
     subject { Person::Subscriptions.new(person).mailing_lists }
@@ -109,7 +110,7 @@ describe Person::Subscriptions do
     end
 
     it 'is present when created for ancestor group' do
-      list.subscriptions.create!(subscriber: top_layer, role_types: ['Group::BottomLayer::Member'])
+      list.subscriptions.create!(subscriber: bottom_layer, role_types: ['Group::BottomLayer::Member'])
       expect(subject).to have(1).item
     end
 

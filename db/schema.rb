@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_20_123613) do
+ActiveRecord::Schema.define(version: 2021_09_17_135250) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -875,6 +875,7 @@ ActiveRecord::Schema.define(version: 2021_08_20_123613) do
     t.string "subscriber_type", null: false
     t.integer "subscriber_id", null: false
     t.boolean "excluded", default: false, null: false
+    t.index ["mailing_list_id", "subscriber_type", "subscriber_id"], name: "index_subscription_uniqueness", unique: true
     t.index ["mailing_list_id"], name: "index_subscriptions_on_mailing_list_id"
     t.index ["subscriber_id", "subscriber_type"], name: "index_subscriptions_on_subscriber_id_and_subscriber_type"
   end

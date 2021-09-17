@@ -12,6 +12,7 @@ describe InvoiceList do
   let(:group)        { groups(:top_layer) }
   let(:person)       { people(:top_leader) }
   let(:other_person) { people(:bottom_member) }
+  let(:subscription) { subscriptions(:leaders_group) }
 
   it 'accepts recipient_ids as comma-separates values' do
     subject.attributes = { recipient_ids: "#{person.id},#{other_person.id}" }
@@ -20,9 +21,7 @@ describe InvoiceList do
   end
 
   it 'accepts receiver as id and type' do
-    Subscription.create!(mailing_list: list,
-                         subscriber: group,
-                         role_types: [Group::TopGroup::Leader])
+    subscription.update!(role_types: [Group::TopGroup::Leader])
     subject.attributes = { receiver_type: 'MailingList', receiver_id: list.id }
     expect(subject.recipient_ids_count).to eq 1
     expect(subject.first_recipient).to eq person

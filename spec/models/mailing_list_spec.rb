@@ -115,7 +115,6 @@ describe MailingList do
       end
 
       it 'is false if excluded' do
-        create_subscription(person)
         create_subscription(person, true)
 
         expect(list.subscribed?(person)).to be_falsey
@@ -329,7 +328,6 @@ describe MailingList do
 
     context 'people with excluded' do
       it 'excludes people' do
-        create_subscription(person)
         create_subscription(people(:top_leader))
         create_subscription(person, true)
 
