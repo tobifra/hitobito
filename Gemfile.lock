@@ -1,7 +1,8 @@
 PATH
-  remote: ../hitobito_generic
+  remote: ../hitobito_die_mitte
   specs:
-    hitobito_generic (1.26.0)
+    hitobito_die_mitte (1.26.18)
+      globalize-accessors
 
 GEM
   remote: https://rubygems.org/
@@ -249,6 +250,8 @@ GEM
       activemodel (>= 4.2, < 6.1)
       activerecord (>= 4.2, < 6.1)
       request_store (~> 1.0)
+    globalize-accessors (0.3.0)
+      globalize (>= 5.0.0)
     haml (5.1.2)
       temple (>= 0.8.0)
       tilt
@@ -649,7 +652,7 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_generic!
+  hitobito_die_mitte!
   http_accept_language
   icalendar
   image_processing (~> 1.2)

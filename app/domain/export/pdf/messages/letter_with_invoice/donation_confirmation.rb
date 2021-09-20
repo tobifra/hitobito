@@ -9,18 +9,57 @@ class Export::Pdf::Messages::LetterWithInvoice
   class DonationConfirmation < Export::Pdf::Messages::Letter::Section
     def initialize(pdf, letter, recipient, options)
       super(pdf, letter, options)
+      pdf.start_new_page
       @recipient = recipient
     end
 
     def render
+      header
       donation_text = stamped(:donation_confirmation_text) { donation_confirmation_text }
       text([donation_text, last_year_donation_amount])
     end
 
     private
 
+    def header
+      stamped(:donation_confirmation_header) { donation_confirmation_header }
+      pdf.move_down 8
+      stamped(:donation_confirmation_salutation) { salutation_text }
+      stamped(:donation_confirmation_content) { donation_confirmation_content }
+
+      title
+    end
+
+    def title
+      stamped(:donation_confirmation_title) { donation_confirmation_title }
+      pdf.stroke_horizontal_rule
+    end
+
+    def salutation_text
+      text Salutation.new(@recipient, letter.salutation).value + break_line
+    end
+
+    def donation_confirmation_content
+      text "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!" + break_line
+    end
+
+    def donation_confirmation_header
+      text "Spenden an die CVP Schweiz", style: :bold, size: 14
+    end
+
+    def donation_confirmation_title
+      text "Spendenbestätigung 2020", style: :bold
+    end
+
     def donation_confirmation_text
-      "\n " + I18n.t('messages.export.section.donation_confirmation')
+      sentence = "\n " +
+        "2020 haben wir von" +
+        "\n " +
+        address +
+        "Spenden erhalten in der Höhe von" +
+        "\n " +
+        "CHF " + last_year_donation_amount
+      sentence
     end
 
     def last_year_donation_amount
@@ -34,6 +73,10 @@ class Export::Pdf::Messages::LetterWithInvoice
                                 to_s
 
       "#{donation_amount} #{currency}"
+    end
+
+    def break_line
+      "\n\n"
     end
   end
 end
