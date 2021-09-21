@@ -8,6 +8,12 @@
 
 module AbilityDsl::Constraints
   module Event
+    def if_invited
+      ::Event::Invitation.exists?(person: user_context.user,
+                                  event: event,
+                                  participation_type: subject.type)
+    end
+
     def for_leaded_events
       permission_in_event?(:event_full)
     end

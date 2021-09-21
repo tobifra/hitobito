@@ -12,13 +12,14 @@ module Dropdown
 
       attr_reader :group, :event, :person
 
-      def initialize(template, group, event, person = nil)
+      def initialize(template, group, event, person = nil, custom_path_method = nil)
         label = translate("add_to_#{event.klass.name.underscore}",
                           default: full_translation_key(:add))
         super(template, label, :plus)
         @group = group
         @event = event
         @person = person
+        @custom_path_method = custom_path_method
         init_items
       end
 
@@ -29,7 +30,8 @@ module Dropdown
           event_role_attrs = { type: type.sti_name }
           event_role_attrs[:person_id] = person.id if person
 
-          link = template.new_group_event_role_path(group, event, event_role: event_role_attrs)
+          path_method = @custom_path_method.presence || :new_group_event_role_path
+          link = template.send(path_method, group, event, event_role: event_role_attrs)
           add_item(type.label, link)
         end
       end
