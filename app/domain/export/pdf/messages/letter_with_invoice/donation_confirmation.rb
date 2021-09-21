@@ -33,6 +33,7 @@ class Export::Pdf::Messages::LetterWithInvoice
     def title
       stamped(:donation_confirmation_title) { donation_confirmation_title }
       pdf.stroke_horizontal_rule
+      pdf.move_down 4
     end
 
     def salutation_text
@@ -52,14 +53,13 @@ class Export::Pdf::Messages::LetterWithInvoice
     end
 
     def donation_confirmation_text
-      sentence = "\n " +
-        "2020 haben wir von" +
-        "\n " +
-        address +
-        "Spenden erhalten in der Höhe von" +
-        "\n " +
-        "CHF " + last_year_donation_amount
-      sentence
+      "\n " +
+      "2020 haben wir von" +
+      break_line +
+      recipient_address +
+      break_line +
+      "Spenden erhalten in der Höhe von" +
+      break_line
     end
 
     def last_year_donation_amount
@@ -72,7 +72,12 @@ class Export::Pdf::Messages::LetterWithInvoice
                                 previous_amount.
                                 to_s
 
-      "#{donation_amount} #{currency}"
+      "#{currency} #{donation_amount}"
+    end
+
+    def recipient_address
+      name = "#{@recipient.first_name}, #{@recipient.last_name} \n"
+      name + "#{@recipient.address}, #{@recipient.zip_code} #{@recipient.town}"
     end
 
     def break_line
