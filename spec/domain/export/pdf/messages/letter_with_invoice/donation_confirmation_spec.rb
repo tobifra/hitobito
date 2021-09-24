@@ -12,14 +12,13 @@ describe Export::Pdf::Messages::LetterWithInvoice::DonationConfirmation do
   let(:top_leader)              { people(:top_leader) }
   let(:top_layer)               { groups(:top_layer) }
   let(:bottom_member)           { people(:bottom_member) }
-  let(:recipients)              { [people(:bottom_member)] }
 
   let(:options)                 { {} }
   let(:letter_with_invoice)     { messages(:with_invoice) }
   let(:pdf)                     { Prawn::Document.new }
   let(:analyzer)                { PDF::Inspector::Text.analyze(pdf.render) }
 
-  subject { described_class.new(pdf, letter_with_invoice, recipients, options) }
+  subject { described_class.new(pdf, letter_with_invoice, bottom_member, options) }
 
   context "donation confirmation" do
     let(:stamps) { pdf.instance_variable_get('@donation_confirmation_text') }
@@ -29,16 +28,42 @@ describe Export::Pdf::Messages::LetterWithInvoice::DonationConfirmation do
       fabricate_donation(500, 1.year.ago)
       fabricate_donation(1000, 2.year.ago)
 
+      letter_with_invoice.salutation = "sehr_geehrter_titel_nachname"
+      top_leader.gender = "m"
+      bottom_member.gender = "m"
+
       subject.render
 
-      expect(text_with_position).to eq [[36, 734, "Folgender Betrag wurde von Ihnen im letzten Jahr gespendet:  700.0 CHF"]]
+      expect(text_with_position).to eq [[36, 746, "Spenden an die CVP Schweiz"],
+                                        [36, 723, "Hallo Bottom"],
+                                        [36, 695, "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"],
+                                        [36, 667, "Spendenbestätigung 2020"],
+                                        [36, 635, "2020 haben wir von"],
+                                        [36, 607, "Bottom, Member "],
+                                        [36, 593, "Greatstreet 345, 3456 Greattown"],
+                                        [36, 566, "Spenden erhalten in der Höhe von"],
+                                        [36, 538, "CHF 700.0"]]
+
     end
 
     it "renders body with zero donation value" do
+      Payment.delete_all
+
+      letter_with_invoice.salutation = "sehr_geehrter_titel_nachname"
+      top_leader.gender = "m"
+      bottom_member.gender = "m"
+
       subject.render
 
-      expect(text_with_position).to eq [[36, 734, "Folgender Betrag wurde von Ihnen im letzten Jahr gespendet:  0.0 CHF"]]
-    end
+      expect(text_with_position).to eq [[36, 746, "Spenden an die CVP Schweiz"],
+                                        [36, 723, "Hallo Bottom"],
+                                        [36, 695, "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"],
+                                        [36, 667, "Spendenbestätigung 2020"],
+                                        [36, 635, "2020 haben wir von"],
+                                        [36, 607, "Bottom, Member "],
+                                        [36, 593, "Greatstreet 345, 3456 Greattown"],
+                                        [36, 566, "Spenden erhalten in der Höhe von"],
+                                        [36, 538, "CHF 0.0"]]    end
   end
 
   private
