@@ -1,7 +1,7 @@
 PATH
   remote: ../hitobito_die_mitte
   specs:
-    hitobito_die_mitte (1.26.18)
+    hitobito_die_mitte (1.26.16)
       globalize-accessors
 
 GEM

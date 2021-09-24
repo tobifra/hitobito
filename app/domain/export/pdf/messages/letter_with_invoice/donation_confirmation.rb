@@ -7,6 +7,8 @@
 
 class Export::Pdf::Messages::LetterWithInvoice
   class DonationConfirmation < Export::Pdf::Messages::Letter::Section
+    ONE_YEAR = 1.year
+
     def initialize(pdf, letter, recipient, options)
       super(pdf, letter, options)
       pdf.start_new_page
@@ -41,24 +43,26 @@ class Export::Pdf::Messages::LetterWithInvoice
     end
 
     def donation_confirmation_content
-      text "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!" + break_line
+      text I18n.t('messages.export.section.donation_confirmation.acknowledgement') + break_line
     end
 
     def donation_confirmation_header
-      text "Spenden an die CVP Schweiz", style: :bold, size: 14
+      text I18n.t('messages.export.section.donation_confirmation.header'), style: :bold, size: 14
     end
 
     def donation_confirmation_title
-      text "Spendenbestätigung 2020", style: :bold
+      text I18n.t('messages.export.section.donation_confirmation.title', year: ONE_YEAR.ago.year),
+           style: :bold
     end
 
     def donation_confirmation_text
       "\n " +
-      "2020 haben wir von" +
+      I18n.t('messages.export.section.donation_confirmation.received_from',
+             year: ONE_YEAR.ago.year) +
       break_line +
       recipient_address +
       break_line +
-      "Spenden erhalten in der Höhe von" +
+      I18n.t('messages.export.section.donation_confirmation.received_amount') +
       break_line
     end
 
@@ -66,7 +70,7 @@ class Export::Pdf::Messages::LetterWithInvoice
       currency = letter.invoice.currency
 
       donation_amount = Donation.new.
-                                in_last(1.year).
+                                in_last(ONE_YEAR).
                                 in_layer(letter.group).
                                 of_person(@recipient).
                                 previous_amount.

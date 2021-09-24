@@ -328,7 +328,6 @@ ActiveRecord::Schema.define(version: 2021_09_14_094906) do
     t.boolean "require_person_add_requests", default: false, null: false
     t.text "description", size: :medium
     t.string "logo"
-    t.string "kunden_id"
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"
@@ -521,7 +520,6 @@ ActiveRecord::Schema.define(version: 2021_09_14_094906) do
     t.datetime "mailchimp_last_synced_at"
     t.text "mailchimp_result", size: :medium
     t.boolean "mailchimp_include_additional_emails", default: false
-    t.string "correspondence_language"
     t.index ["group_id"], name: "index_mailing_lists_on_group_id"
   end
 
@@ -707,22 +705,11 @@ ActiveRecord::Schema.define(version: 2021_09_14_094906) do
     t.string "household_key"
     t.string "event_feed_token"
     t.string "unlock_token"
-    t.string "title"
-    t.string "website"
-    t.string "salutation"
-    t.string "correspondence_language", default: "de", null: false
-    t.string "civil_status", default: "single", null: false
-    t.string "kunden_id"
-    t.integer "kundennummer"
-    t.integer "kontaktnummer"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["email"], name: "index_people_on_email", unique: true
     t.index ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true
     t.index ["first_name"], name: "index_people_on_first_name"
     t.index ["household_key"], name: "index_people_on_household_key"
-    t.index ["kontaktnummer"], name: "index_people_on_kontaktnummer"
-    t.index ["kunden_id"], name: "index_people_on_kunden_id"
-    t.index ["kundennummer"], name: "index_people_on_kundennummer"
     t.index ["last_name"], name: "index_people_on_last_name"
     t.index ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_people_on_unlock_token", unique: true
@@ -819,24 +806,14 @@ ActiveRecord::Schema.define(version: 2021_09_14_094906) do
     t.index ["role_type"], name: "index_related_role_types_on_role_type"
   end
 
-  create_table "role_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.integer "role_id", null: false
-    t.string "locale", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "label"
-    t.index ["locale"], name: "index_role_translations_on_locale"
-    t.index ["role_id"], name: "index_role_translations_on_role_id"
-  end
-
   create_table "roles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "person_id", null: false
     t.integer "group_id", null: false
     t.string "type", null: false
+    t.string "label"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
-    t.string "mitgliedschafts_nummer"
     t.index ["person_id", "group_id"], name: "index_roles_on_person_id_and_group_id"
     t.index ["type"], name: "index_roles_on_type"
   end
@@ -921,8 +898,15 @@ ActiveRecord::Schema.define(version: 2021_09_14_094906) do
     t.string "context", limit: 128
     t.datetime "created_at"
     t.string "hitobito_tooltip"
+    t.index ["context"], name: "index_taggings_on_context"
     t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
     t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
+    t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy"
+    t.index ["taggable_id"], name: "index_taggings_on_taggable_id"
+    t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
+    t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
+    t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
   end
 
   create_table "tags", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|

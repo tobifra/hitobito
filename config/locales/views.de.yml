@@ -979,7 +979,14 @@ de:
       recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
     export:
       section:
-        donation_confirmation: "Folgender Betrag wurde von Ihnen im letzten Jahr gespendet: "
+        donation_confirmation:
+          header: "Spenden an die CVP Schweiz"
+          title: "Spendenbestätigung %{year}"
+          received_amount: "Spenden erhalten in der Höhe von"
+          received_from: "%{year} haben wir von"
+          acknowledgement: "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"
+
+
 
   navigation:
     menu: 'Menü'
