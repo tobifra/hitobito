@@ -34,7 +34,7 @@ describe Export::Pdf::Messages::LetterWithInvoice::DonationConfirmation do
 
       subject.render
 
-      expect(text_with_position).to eq [[36, 746, "Spenden an die CVP Schweiz"],
+      expect(text_with_position).to eq [[36, 746, "Spenden an top"],
                                         [36, 723, "Hallo Bottom"],
                                         [36, 695, "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"],
                                         [36, 667, "Spendenbestätigung 2020"],
@@ -55,7 +55,7 @@ describe Export::Pdf::Messages::LetterWithInvoice::DonationConfirmation do
 
       subject.render
 
-      expect(text_with_position).to eq [[36, 746, "Spenden an die CVP Schweiz"],
+      expect(text_with_position).to eq [[36, 746, "Spenden an top"],
                                         [36, 723, "Hallo Bottom"],
                                         [36, 695, "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"],
                                         [36, 667, "Spendenbestätigung 2020"],

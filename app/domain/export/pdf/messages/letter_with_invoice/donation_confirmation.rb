@@ -13,6 +13,7 @@ class Export::Pdf::Messages::LetterWithInvoice
       super(pdf, letter, options)
       pdf.start_new_page
       @recipient = recipient
+      @letter = letter
     end
 
     def render
@@ -47,7 +48,11 @@ class Export::Pdf::Messages::LetterWithInvoice
     end
 
     def donation_confirmation_header
-      text I18n.t('messages.export.section.donation_confirmation.header'), style: :bold, size: 14
+      layer_name = @letter.group.layer_group.name
+      layer_name[0] = layer_name[0].downcase
+      text I18n.t('messages.export.section.donation_confirmation.header', organisation: layer_name),
+           style: :bold,
+           size: 14
     end
 
     def donation_confirmation_title

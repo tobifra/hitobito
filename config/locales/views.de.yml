@@ -980,7 +980,7 @@ de:
     export:
       section:
         donation_confirmation:
-          header: "Spenden an die CVP Schweiz"
+          header: "Spenden an %{organisation}"
           title: "Spendenbestätigung %{year}"
           received_amount: "Spenden erhalten in der Höhe von"
           received_from: "%{year} haben wir von"
